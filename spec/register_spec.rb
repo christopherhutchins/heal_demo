@@ -17,6 +17,17 @@ describe "Register Patient", type: :feature, js: true do
       expect(page).to have_content "Book Visit"
       expect(page).to have_content "Is this a life-threatening medical emergency?"
     end
+
+    context "Given zip code is out of coverage" do
+      it "prompts user before completing registration" do
+        fill_out_and_submit_form(firstname, lastname, email, pw, pw, phone, 12345)
+        expect(page).to have_content "We're Not in Your Area...yet!"
+        click_button "Continue"
+        expect(page).to have_selector '#book-visit'
+        expect(page).to have_content "Book Visit"
+        expect(page).to have_content "Is this a life-threatening medical emergency?"
+      end
+    end
   end
 
   context "Given bad input" do
@@ -82,19 +93,16 @@ describe "Register Patient", type: :feature, js: true do
       it_behaves_like "alert on page", "Last Name Is Required"
     end
   end
+end
 
-  def fill_out_and_submit_form(firstname, lastname, email, pw, confirm_pw, phone, zip)
-    fill_in 'firstname',   with: firstname
-    fill_in 'lastname',    with: lastname
-    fill_in 'username',    with: email
-    fill_in 'password',    with: pw
-    fill_in 'password2',   with: confirm_pw
-    fill_in 'phonenumber', with: phone
-    fill_in 'zipcode',     with: zip
+def fill_out_and_submit_form(firstname, lastname, email, pw, confirm_pw, phone, zip)
+  fill_in 'firstname',   with: firstname
+  fill_in 'lastname',    with: lastname
+  fill_in 'username',    with: email
+  fill_in 'password',    with: pw
+  fill_in 'password2',   with: confirm_pw
+  fill_in 'phonenumber', with: phone
+  fill_in 'zipcode',     with: zip
 
-    click_button "Create Account"
-    # binding.pry
-  end
-
-
+  click_button "Create Account"
 end
