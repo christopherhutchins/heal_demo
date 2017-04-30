@@ -13,11 +13,11 @@ class Patient < Struct.new(:firstname, :lastname, :email, :pw, :confirm_pw, :pho
     click_button "Create Account"
   end
 
-  def register_successfully?
+  def registered_successfully?
     within('.header-container') do
       find '.primary-blue', text: "#{firstname} #{lastname}"
     end
-    
+
     within('#book-visit') do
       find 'h3', text: "Book Visit"
       find 'h3', text: "Is this a life-threatening medical emergency?"

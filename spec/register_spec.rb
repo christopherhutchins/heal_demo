@@ -6,7 +6,7 @@ describe "Register Patient", type: :feature, js: true do
   let(:lastname)  { Faker::Name.last_name }
   let(:pw)        { Faker::Internet.password }
   let(:email)     { Faker::Internet.email }
-  let(:phone)     { "818#{Faker::Number.number(7)}" }
+  let(:phone)     { "818555#{Faker::Number.number(4)}" }
   let(:zip)       { 91321 }
 
   before { visit '/register' }
@@ -18,7 +18,7 @@ describe "Register Patient", type: :feature, js: true do
 
     it "successfully registers patient" do
       patient.register
-      expect(patient).to be_register_successfully
+      expect(patient).to be_registered_successfully
     end
   end
 
@@ -31,12 +31,12 @@ describe "Register Patient", type: :feature, js: true do
       patient.register
       expect(page).to have_content "We're Not in Your Area...yet!"
       click_button "Continue"
-      expect(patient).to be_register_successfully
+      expect(patient).to be_registered_successfully
     end
   end
 
   context "Given bad input" do
-    shared_examples "alert on page" do |alert|
+    shared_examples "user with invalid info" do |alert|
       it "alert appears, user is not registered" do
         patient.register
         expect(page).to have_selector '.alert', text: alert
@@ -48,7 +48,7 @@ describe "Register Patient", type: :feature, js: true do
         Patient.new(firstname, lastname, email, pw, "confirm_pw", phone, zip)
       end
 
-      it_behaves_like "alert on page", "Passwords Do Not Match."
+      it_behaves_like "user with invalid info", "Passwords Do Not Match."
     end
 
     context "When password is missing" do
@@ -56,7 +56,7 @@ describe "Register Patient", type: :feature, js: true do
         Patient.new(firstname, lastname, email, '', '', phone, zip)
       end
 
-      it_behaves_like "alert on page", "Password Is Required"
+      it_behaves_like "user with invalid info", "Password Is Required"
     end
 
     context "When email is incomplete" do
@@ -64,7 +64,7 @@ describe "Register Patient", type: :feature, js: true do
         Patient.new(firstname, lastname, "john.smith@", pw, pw, phone, zip)
       end
 
-      it_behaves_like "alert on page", "Use your email as a valid username, (e.g. email@example.com)"
+      it_behaves_like "user with invalid info", "Use your email as a valid username, (e.g. email@example.com)"
     end
 
     context "When phone number is missing" do
@@ -72,7 +72,15 @@ describe "Register Patient", type: :feature, js: true do
         Patient.new(firstname, lastname, email, pw, pw, '', zip)
       end
 
-      it_behaves_like "alert on page", "Phone Number Is Required."
+      it_behaves_like "user with invalid info", "Phone Number Is Required."
+    end
+
+    context "When phone number is invalid" do
+      let(:patient) do
+        Patient.new(firstname, lastname, email, pw, pw, '1231111111', zip)
+      end
+
+      it_behaves_like "user with invalid info", "Invalid Phone Number"
     end
 
     context "When zip code is missing" do
@@ -80,7 +88,7 @@ describe "Register Patient", type: :feature, js: true do
         Patient.new(firstname, lastname, email, pw, pw, phone, '')
       end
 
-      it_behaves_like "alert on page", "Zipcode Is Required."
+      it_behaves_like "user with invalid info", "Zipcode Is Required."
     end
 
     context "When first name is missing" do
@@ -88,7 +96,7 @@ describe "Register Patient", type: :feature, js: true do
         Patient.new('', lastname, email, pw, pw, phone, zip)
       end
 
-      it_behaves_like "alert on page", "First Name Is Required"
+      it_behaves_like "user with invalid info", "First Name Is Required"
     end
 
     context "When last name is missing" do
@@ -96,7 +104,7 @@ describe "Register Patient", type: :feature, js: true do
         Patient.new(firstname, '', email, pw, pw, phone, zip)
       end
 
-      it_behaves_like "alert on page", "Last Name Is Required"
+      it_behaves_like "user with invalid info", "Last Name Is Required"
     end
   end
 end
