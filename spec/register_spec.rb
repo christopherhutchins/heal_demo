@@ -1,5 +1,3 @@
-require 'spec_helper'
-require_relative 'patient_page_object'
 
 describe "Register Patient", type: :feature, js: true do
   let(:firstname) { Faker::Name.first_name }
@@ -37,7 +35,7 @@ describe "Register Patient", type: :feature, js: true do
 
   context "Given bad input" do
     shared_examples "user with invalid info" do |alert|
-      it "alert appears, user is not registered" do
+      it "#{alert}, user is not registered" do
         patient.register
         expect(page).to have_selector '.alert', text: alert
       end
@@ -64,7 +62,8 @@ describe "Register Patient", type: :feature, js: true do
         Patient.new(firstname, lastname, "john.smith@", pw, pw, phone, zip)
       end
 
-      it_behaves_like "user with invalid info", "Use your email as a valid username, (e.g. email@example.com)"
+      it_behaves_like "user with invalid info",
+      "Use your email as a valid username, (e.g. email@example.com)"
     end
 
     context "When phone number is missing" do

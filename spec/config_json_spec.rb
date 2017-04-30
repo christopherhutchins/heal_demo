@@ -1,7 +1,5 @@
 #Test for the config.json
 
-require 'spec_helper'
-
 describe "Config.json" do
   let(:response) { HTTParty.get('https://patient.heal.com/app/config.json').parsed_response }
 
