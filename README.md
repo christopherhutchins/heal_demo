@@ -15,15 +15,23 @@ The prompt will ask you to install command line tools; install it.
 
 `$ \curl -sSL https://get.rvm.io | bash -s stable --ruby`
 
-Follow any directions in the prompt after RVM has finished installing.
+Load RVM in the current shell with the following command:
 
-Then...
+`$ source ~/.rvm/scripts/rvm`
+
+Then set the ruby version to use...
 
 `$ rvm use 2.4.0 --default`
 
 ### Install bundler gem in the command line
 
 `$ gem install bundler`
+
+## Clone repo into your local
+
+`$ git clone https://github.com/christopherhutchins/heal_demo.git`
+
+## Install ruby gems
 
 `$ bundle install`
 
