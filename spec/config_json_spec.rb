@@ -1,7 +1,9 @@
 #Test for the config.json
 
 describe "Config.json" do
-  let(:response) { HTTParty.get('https://patient.heal.com/app/config.json').parsed_response }
+  let(:response) do
+    HTTParty.get('https://patient.heal.com/app/config.json').parsed_response
+  end
 
   describe "Response body" do
     it "has title" do
