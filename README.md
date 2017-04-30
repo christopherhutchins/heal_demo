@@ -1,6 +1,6 @@
 # heal_demo
 
-## Setup
+## Setup(OSX)
 Install xcode
 
 `$ xcode-select --install`
